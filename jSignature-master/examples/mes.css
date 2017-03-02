@@ -20,11 +20,7 @@ html,body {
    	font-size: 0.3rem;
    	text-align: center;
    }
-   img{
-			width: 25%;
-			height: 12.5%;
-			margin-left: 35vw;
-		}
+
     .line{
     	border-bottom: 1px solid black;
     	display: inline-block;
