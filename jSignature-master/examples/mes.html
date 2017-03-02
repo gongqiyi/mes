@@ -7,7 +7,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="initial-scale=1.0, target-densitydpi=device-dpi" /><!-- this is for mobile (Android) Chrome -->
 <meta name="viewport" content="initial-scale=1.0, width=device-height"><!--  mobile Safari, FireFox, Opera Mobile  -->
-
+<link rel="stylesheet" type="text/css" href="bootstrap.min.css.map">
 <link rel="stylesheet" type="text/css" href="reset.css">
 <link rel="stylesheet" type="text/css" href="mes.css">
 <script src="../libs/modernizr.js"></script>
@@ -38,7 +38,19 @@ var timeID=setTimeout(showLeftTime,1000);
 <div class="header"><h1>welcome</h1></div>
 <div class="time"><label id="show">显示时间的位置</label></div>
 <div class="log"><img src="1.jpg" style="width: 25%;height: 12.5%;margin-left: 35vw;"></div>
-<div class="sign">name: <span class="line"></span></div>
+<form>
+  <div class="form-group">
+    <label for="exampleInputname1" class="name">name：</label>
+    <input type="name" class="form-control" id="exampleInputEmail1" placeholder="name">
+    <input type="reset" name="">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputEmail1" class="name">email：</label>
+    <input type="email" class="form-control" id="exampleInputPassword1" placeholder="email">
+     <input type="reset" name="">
+  </div>
+  <button type="submit" class="btn btn-default">Submit</button>
+</form>
 <div class="board">
 <div id="content">
 	<div id="signatureparent">

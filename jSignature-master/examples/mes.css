@@ -21,15 +21,17 @@ html,body {
    	text-align: center;
    }
 
-    .line{
-    	border-bottom: 1px solid black;
-    	display: inline-block;
-    	width: 3rem;
-    }
+   .name{
+   	font-size: .2rem;
+   	vertical-align: -0.05rem;
+   }
 
 	.board {
 		margin-top:1em;
 		margin-bottom:1em;
+	}
+	.form-control{
+		margin-left: -0.3rem;
 	}
 	input {
 		padding: .5em;
