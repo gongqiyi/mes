@@ -18,20 +18,22 @@ html,body {
 		}
    .time{
    	font-size: 0.3rem;
-   	text-align: center;
+   	text-align: right;
    }
 
    .name{
-   	font-size: .2rem;
+   	font-size: .4rem;
    	vertical-align: -0.05rem;
    }
 
 	.board {
 		margin-top:1em;
 		margin-bottom:1em;
+	 
 	}
 	.form-control{
 		margin-left: -0.3rem;
+		font-size: .3rem;
 	}
 	input {
 		padding: .5em;
