@@ -5,11 +5,12 @@
 <!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame
    Remove this if you use the .htaccess -->
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<meta name="viewport" content="initial-scale=1.0, target-densitydpi=device-dpi" /><!-- this is for mobile (Android) Chrome -->
+<!-- <meta name="viewport" content="initial-scale=1.0, target-densitydpi=device-dpi" /> --><!-- this is for mobile (Android) Chrome -->
 <meta name="viewport" content="initial-scale=1.0, width=device-height"><!--  mobile Safari, FireFox, Opera Mobile  -->
-<link rel="stylesheet" type="text/css" href="bootstrap.min.css.map">
 <link rel="stylesheet" type="text/css" href="reset.css">
 <link rel="stylesheet" type="text/css" href="mes.css">
+<script type="text/javascript" src="handlebars.js"></script>
+<script type="text/javascript" src="jquery.js"></script>
 <script src="../libs/modernizr.js"></script>
 <!--[if lt IE 9]>
 <script type="text/javascript" src="../libs/flashcanvas.js"></script>
@@ -38,19 +39,7 @@ var timeID=setTimeout(showLeftTime,1000);
 <div class="header"><h1>welcome</h1></div>
 <div class="time"><label id="show">显示时间的位置</label></div>
 <div class="log"><img src="1.jpg" style="width: 25%;height: 12.5%;margin-left: 35vw;"></div>
-<form>
-  <div class="form-group">
-    <label for="exampleInputname1" class="name">name：</label>
-    <input type="name" class="form-control" id="exampleInputEmail1" placeholder="name">
-    <input type="reset" name="">
-  </div>
-  <div class="form-group">
-    <label for="exampleInputEmail1" class="name">email：</label>
-    <input type="email" class="form-control" id="exampleInputPassword1" placeholder="email">
-     <input type="reset" name="">
-  </div>
-  <button type="submit" class="btn btn-default">Submit</button>
-</form>
+</span><div id="page-content"></div>
 <div class="board">
 <div id="content">
 	<div id="signatureparent">
@@ -112,6 +101,11 @@ http://dojofoundation.org/license for more information.
 <script src="../src/plugins/jSignature.UndoButton.js"></script> 
 <script src="../src/plugins/signhere/jSignature.SignHere.js"></script> 
 <script>
+function re(){
+var img=$('#tex').val()
+localStorage.img = JSON.stringify(img) 
+}
+
 $(document).ready(function() {
 	
 	// This is the part where jSignature is initialized.
@@ -157,7 +151,7 @@ $(document).ready(function() {
 		$sigdiv.jSignature('reset')
 	}).appendTo($tools)
 	
-	$('<div><textarea style="width:100%;height:7em;"></textarea></div>').appendTo($tools)
+	$('<div ><textarea id="tex" style="width:100%;height:7em;"></textarea></div>').appendTo($tools)
 	
 	$.subscribe(pubsubprefix + 'formatchanged', function(){
 		$extraarea.html('')
@@ -199,6 +193,7 @@ $(document).ready(function() {
 		i.src = 'data:' + data[0] + ',' + data[1]
 		$('<span><b>.</b></span>').appendTo($extraarea)
 		$(i).appendTo($extraarea)
+		re()
 	});
 	
 	$.subscribe(pubsubprefix + 'image/jsignature;base30', function(data) {
@@ -210,6 +205,90 @@ $(document).ready(function() {
 	}
 	
 })
+re()
+
+</script>
+<script type="text/template" id="tpl">
+  <div class="todo-app">
+    <header>
+      <h1>Todos</h1>
+      <form>
+      <div class="name">name:</div><input type="text" class="inputTodo">
+      <input type="reset" name="">
+      <br>
+     <div class="name">email:</div><input type="text" class="inputTodo two">
+      <input type="reset" name="">
+       <br>
+      <div class="name">time:</div><input type="text" class="inputTodo three">
+      <input type="reset" name="">
+      </form>
+    </header>
+  </div>
+</script>
+<script>
+  Handlebars.registerHelper('ifCond', function(v1, v2, options) {
+    console.log(options, this);
+    if(v1 === v2) {
+      return options.fn(this);
+    }
+    return options.inverse(this);
+  });
+  Handlebars.registerHelper('length', function(todos) {
+    return todos.filter(it => !it.done).length
+  })
+</script>
+<script>
+  var todos
+
+  if (localStorage.todos) {
+    todos = JSON.parse(localStorage.todos)
+  } else {
+    todos = [{
+     
+      content: 'eatting'
+    }, {
+   
+      content: 'sleep'
+    }]
+  }
+
+
+
+
+
+  var tplSource = $('#tpl').html()
+  var compiled = Handlebars.compile(tplSource)
+
+  var show = 'all'
+
+  function render() {
+    localStorage.todos = JSON.stringify(todos)
+    var info = {}
+    info.show = show
+    info.activeCount = todos.filter(it => !it.done).length
+    info.allDone = todos.length ? todos.every(it => it.done) : false
+    var pageHtml = compiled({
+      todos: todos,
+      info: info,
+    })
+    $('#page-content').html(pageHtml)
+  }
+
+  render()
+
+  $('#page-content')
+    .on('keypress', '.inputTodo', function(event) {
+      if (event.keyCode == 13) {
+        var todo = this.value
+        todos.push({
+         content: todo
+        })
+        render()
+        //this.value = ''
+        $('.inputTodo').focus()
+      }
+    })
+    
 </script>
 </body>
 </html>
