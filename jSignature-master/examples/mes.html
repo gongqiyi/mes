@@ -15,6 +15,12 @@
 <!--[if lt IE 9]>
 <script type="text/javascript" src="../libs/flashcanvas.js"></script>
 <![endif]-->
+<style>
+  #tools span,#tools select,#tools textarea{
+    display: none;
+  }
+
+</style>
 <script language="javascript" type="text/javascript">
 <!--
 //获得当前时间,刻度为一千分一秒
@@ -42,11 +48,13 @@ var timeID=setTimeout(showLeftTime,1000);
 </span><div id="page-content"></div>
 <div class="board">
 <div id="content">
-	<div id="signatureparent">
-		<div></div>
-		<div id="signature"></div></div>
-	<div id="tools"></div>
-	<div><p></p><div id="displayarea"></div></div>
+  <div id="signatureparent">
+    <div></div>
+    <div id="signature"></div></div>
+  <div id="tools">
+    <button class="post">提交</button>
+  </div>
+  <div><p></p><div id="displayarea"></div></div>
 </div>
 <div id="scrollgrabber"></div>
 </div>
@@ -109,7 +117,7 @@ localStorage.img = JSON.stringify(img)
 $(document).ready(function() {
 	
 	// This is the part where jSignature is initialized.
-	var $sigdiv = $("#signature").jSignature({'UndoButton':true})
+	var $sigdiv = $("#signature").jSignature({'UndoButton':true,height:360,width:1300})
 	
 	// All the code below is just code driving the demo. 
 	, $tools = $('#tools')
@@ -125,7 +133,7 @@ $(document).ready(function() {
 			chops.push('<option value="' + name + '">' + name + '</option>')
 		}
 	}
-	chops.push('</select><span><b> or: </b></span>')
+	// chops.push('</select><span><b> or: </b></span>')
 	
 	$(chops.join('')).bind('change', function(e){
 		if (e.target.value !== ''){
@@ -212,15 +220,13 @@ re()
   <div class="todo-app">
     <header>
       <h1>Todos</h1>
-      <form>
-      <div class="name">name:</div><input type="text" class="inputTodo">
+      <form >
+      <div class="name">name:</div><input type="text" class="inputTodo" name="name">
       <input type="reset" name="">
       <br>
-     <div class="name">email:</div><input type="text" class="inputTodo two">
+     <div class="name">email:</div><input type="text" class="inputTodo two" name="email">
       <input type="reset" name="">
        <br>
-      <div class="name">time:</div><input type="text" class="inputTodo three">
-      <input type="reset" name="">
       </form>
     </header>
   </div>
@@ -288,7 +294,27 @@ re()
         $('.inputTodo').focus()
       }
     })
-    
+  
+   //get and save canvas data 
+   // document.querySelector("#tools span").style.display = "none"
+   // document.querySelector("input[value='Reset']").style.display = "inline-block"
+   document.querySelector(".post").addEventListener("click",function(){
+    var canvas = document.querySelector(".jSignature")
+    var canvasData = canvas.toDataURL("image/png")
+    var name = document.querySelector("input[name='name']").value
+    var time = document.querySelector("#show").innerHTML
+    var email = document.querySelector("input[name='email']").value
+    if(name == "" || email == ""){
+      return
+    }else{
+      var result = {'name':name,'email':email,"time":time,'image':canvasData}
+      localStorage.setItem("data",JSON.stringify(result))
+    }
+    document.querySelector("input[value='Reset']").click()
+    $.post("http://www.baidu.com",{"name":name,"email":email,"time":time,"image":canvasData})
+     document.querySelector("input[name='name']").value = ""
+     document.querySelector("input[name='email']").value = ""
+   })
 </script>
 </body>
 </html>
